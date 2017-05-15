@@ -1,18 +1,19 @@
 package msgcopy.com.aidldemoservice;
 
+import android.app.Service;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import msgcopy.com.service.IAidlService;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private IAidlService service;
 
@@ -20,13 +21,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initService();
     }
+
 
     private void initService() {
         Intent intent = new Intent();
         intent.setClass(MainActivity.this,MyService.class);
-        bindService(intent,connection, Context.BIND_AUTO_CREATE);
+        bindService(intent,connection, Service.BIND_AUTO_CREATE);
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -53,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(connection);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.button:
+                initService();
+                break;
+            case R.id.button2:
+                unbindService(connection);
+                break;
+        }
     }
 }
